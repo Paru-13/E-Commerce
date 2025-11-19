@@ -44,8 +44,7 @@ export const register = asyncHandler(async (req, res, next) => {
 
 //login
 export const login = asyncHandler(async (req, res, next) => {
-  
-    //!email pw
+      //!email pw
     const { email, password } = req.body;
     if (!email) {
       /*

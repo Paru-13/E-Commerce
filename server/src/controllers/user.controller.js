@@ -1,20 +1,19 @@
 import User from "../models/user.model.js";
+import { asyncHandler } from "../utils/asyncHandler.utils.js";
 
-export const getAll = async (req, res, next) => {
-  try {
+export const getAll = (async (req, res, next) => {
+  
     const users = await User.find({});
     res.status(200).json({
       message: "User Fetched",
       data: users,
     });
-  } catch (error) {
-    next(error);
-  }
-};
+  
+});
 
 //!get By ID
-export const getByID = async(req,res,next)=>{
-try {
+export const getByID = asyncHandler(async(req,res,next)=>{
+
     const {id} = req.params
     const user = await User.findById(id);
     if(!user){
@@ -24,15 +23,13 @@ try {
         message:'User by ID',
         data:user
     })
-} catch (error) {
-    next(error)
-}
-}
+
+})
 
 
 //!update user profile
-export const updateProfile = async (req, res, next) => {
-  try {
+export const updateProfile = asyncHandler(async (req, res, next) => {
+ 
     const {id} = req.params
     const { first_name, last_name, phone_Number, gender } = req.body;
 
@@ -46,7 +43,5 @@ export const updateProfile = async (req, res, next) => {
         message:'Profile Updated',
         data:user
     })
-  } catch (error) {
-    next(error);
-  }
-};
+  
+});
