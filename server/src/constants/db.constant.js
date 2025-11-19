@@ -1,4 +1,4 @@
 export const MONGO_CONFIG ={
-    uri:'mongodb://127.0.0.1:27017',
-    db_name:'E-Commerce'
+    uri: process.env.MONGODB_URI,
+    db_name: process.env.DB_NAME
 }
