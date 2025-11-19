@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { MONGO_CONFIG } from "../constants/db.constant.js";
+import { MONGO_CONFIG } from "./config.js";
+
 
 //mongoDB connection
 export const connectDB = () => {
