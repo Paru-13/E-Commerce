@@ -4,6 +4,7 @@ import USER from "../models/user.model.js";
 import { comparePW, hashPassword } from "../utils/bcrypt.utils.js";
 import { asyncHandler } from "../utils/asyncHandler.utils.js";
 import { uploadToCloud } from "../utils/cloudinary.utils.js";
+import { generateJWTToken } from "../utils/JWT.utils.js";
 
 //register user
 export const register = asyncHandler(async (req, res, next) => {
@@ -39,17 +40,19 @@ export const register = asyncHandler(async (req, res, next) => {
     role: USER_ROLE.USER,
   });
 
-
   //if image aairako cha vani
-  if(image){
-    const {path, public_id}= await uploadToCloud(image.path,'/profile_image') //upload to cloud, file-image, folder name where to upload in cloud-profile_image
-    user.profile_image ={
+  if (image) {
+    const { path, public_id } = await uploadToCloud(
+      image.path,
+      "/profile_image"
+    ); //upload to cloud, file-image, folder name where to upload in cloud-profile_image
+    user.profile_image = {
       path,
-      public_id
-    }
+      public_id,
+    };
   }
 
-  await user.save() 
+  await user.save();
 
   res.status(201).json({
     message: "Account Created",
@@ -88,11 +91,19 @@ export const login = asyncHandler(async (req, res, next) => {
     throw new CustomError("Credentials doesnot match", 400);
   }
 
-  //!Token create
+  //!Token create(payload)
+  const access_token = generateJWTToken({
+    _id: user._id,
+    email: user.email,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    role: user.role,
+  });
 
   //!login success
   res.status(201).json({
     message: "login success",
     data: user,
+    access_token
   });
 });
