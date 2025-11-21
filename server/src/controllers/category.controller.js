@@ -64,7 +64,7 @@ export const update = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
   const file = req.file;
 
-  const category = await Category.findById({ id });
+  const category = await Category.findOne({ id });
   if (!category) {
     throw new CustomError("Category not found", 404);
   }
@@ -73,7 +73,7 @@ export const update = asyncHandler(async (req, res) => {
     category.name = name;
   }
   if (description) {
-    category.name = description;
+    category.description = description;
   }
   if (file) {
     if (category.image) {
@@ -81,7 +81,7 @@ export const update = asyncHandler(async (req, res) => {
       await deleteFile(category.image?.public_id);
     }
 
-    const { public_id, path } = await uploadToCloud(file.path);
+    const { public_id, path } = await uploadToCloud(file.path,'/categories');
     category.image = {
       path,
       public_id,

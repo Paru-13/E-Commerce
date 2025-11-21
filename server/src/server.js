@@ -5,6 +5,7 @@ import { connectDB } from './config/db.config.js'
 //importing routes
 import authRoutes from './routes/auth.routes.js'
 import categoryRoutes from './routes/category.routes.js'
+import brandRoutes from './routes/brand.routes.js'
 
 //importing error handler
 import { errorHandler } from './middlewares/errorHandler.middleware.js'
@@ -30,6 +31,7 @@ app.get('/', (req,res) =>{
 //!using routes
 app.use('/api/auth',authRoutes)
 app.use('/api/category',categoryRoutes)
+app.use('/api/brands',brandRoutes)
 
 
 //error handling middleware
