@@ -33,10 +33,10 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(GENDER),
       // default: GENDER.MALE
     },
-    profile_picture: {
+    profile_image: {
       type: {
         path: String,
-        public_id: String,
+        public_id: String
       },
     },
     phone_Number: {

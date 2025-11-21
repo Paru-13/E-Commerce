@@ -7,7 +7,7 @@ const router = express.Router()
 
 const uploader = upoladFile('/profiles')
 //register
-router.post('/register',uploader.single('Profile_image'),register)  //fieldname-pp, server ma file upload garxa, upload folder ma store garxa
+router.post('/register',uploader.single('profile_image'),register)  //fieldname-pp, server ma file upload garxa, upload folder ma store garxa
 
 //login
 router.post('/login',login)

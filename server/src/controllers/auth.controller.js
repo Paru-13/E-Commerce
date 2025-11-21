@@ -3,81 +3,96 @@ import { USER_ROLE } from "../constants/enums.constant.js";
 import USER from "../models/user.model.js";
 import { comparePW, hashPassword } from "../utils/bcrypt.utils.js";
 import { asyncHandler } from "../utils/asyncHandler.utils.js";
+import { uploadToCloud } from "../utils/cloudinary.utils.js";
 
 //register user
 export const register = asyncHandler(async (req, res, next) => {
-  
-    const { first_name, last_name, email, password, phone_Number, gender } =
-      req.body;
+  const { first_name, last_name, email, password, phone_Number, gender } =
+    req.body;
+  const image = req.file;
+  console.log(image);
+  console.log(req.file);
 
-    //password chaina vani
-    if (!password) {
-      /*
+  //password chaina vani
+  if (!password) {
+    /*
       const error = new Error("Password is required")
       //status code + status + msg(pw is required) aafai lay pathako error aauda
       error.statusCode = 400
       error.status = 'fail'
       throw error
       */
-      throw new CustomError("Password is required", 400); //instead of upper long code
+    throw new CustomError("Password is required", 400); //instead of upper long code
+  }
+
+  //if password xa vani, pw lai hash garne
+  const hassPW = await hashPassword(password);
+
+  //user vannay object banako USER vannay class ma
+  const user = new USER({
+    first_name,
+    last_name,
+    email,
+    password: hassPW, //user create garnay time ma user ko orignal pw narakhera hashpw rakheko
+    phone_Number,
+    gender,
+    role: USER_ROLE.USER,
+  });
+
+
+  //if image aairako cha vani
+  if(image){
+    const {path, public_id}= await uploadToCloud(image.path,'/profile_image') //upload to cloud, file-image, folder name where to upload in cloud-profile_image
+    user.profile_image ={
+      path,
+      public_id
     }
+  }
 
-    //if password xa vani, pw lai hash garne
-    const hassPW = await hashPassword(password);
+  await user.save() 
 
-    const user = await USER.create({
-      first_name,
-      last_name,
-      email,
-      password: hassPW, //user create garnay time ma user ko orignal pw narakhera hashpw rakheko
-      phone_Number,
-      gender,
-      role: USER_ROLE.USER,
-    });
-    res.status(201).json({
-      message: "Account Created",
-      status: "success",
-      data: user,
-    });
-  
+  res.status(201).json({
+    message: "Account Created",
+    status: "success",
+    data: user,
+  });
 });
 
 //login
 export const login = asyncHandler(async (req, res, next) => {
-      //!email pw
-    const { email, password } = req.body;
-    if (!email) {
-      /*
+  //!email pw
+  const { email, password } = req.body;
+  if (!email) {
+    /*
       const error = new Error("Email is required");
       next(error);
       */
-      throw new CustomError("Email is required", 400);
-    }
-    if (!password) {
-      throw new CustomError("Password is required", 400);
-    }
+    throw new CustomError("Email is required", 400);
+  }
+  if (!password) {
+    throw new CustomError("Password is required", 400);
+  }
 
-    //!check/get user by email
-    const user = await USER.findOne({ email });
-    //*throw error if user not found
-    if (!user) {
-      throw new CustomError("Credentials doesnot match", 400);
-    }
+  //!check/get user by email
+  const user = await USER.findOne({ email });
+  //*throw error if user not found
+  if (!user) {
+    throw new CustomError("Credentials doesnot match", 400);
+  }
 
-    //!compare password
-    const isMatch = await comparePW(password, user.password);
+  //!compare password
+  const isMatch = await comparePW(password, user.password);
 
-    //*throw error if pw doesnot match
-    if (!isMatch) {
-      throw new CustomError("Credentials doesnot match", 400);
-    }
+  //*throw error if pw doesnot match
+  if (!isMatch) {
+    throw new CustomError("Credentials doesnot match", 400);
+  }
 
-    //!Token create
+  //!Token create
 
-    //!login success
-    res.status(201).json({
-      message: "login success",
-      data: user,
-    });
-  
+  //!login success
+  res.status(201).json({
+    message: "login success",
+    data: user,
+  });
 });

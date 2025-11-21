@@ -4,6 +4,7 @@ import { connectDB } from './config/db.config.js'
 
 //importing routes
 import authRoutes from './routes/auth.routes.js'
+import categoryRoutes from './routes/category.routes.js'
 
 //importing error handler
 import { errorHandler } from './middlewares/errorHandler.middleware.js'
@@ -18,6 +19,7 @@ connectDB()
 
 //using middlewares
 app.use(express.json({limit:'10mb'}))
+app.use('/api/uploads',express.static('uploads'))
 
 app.get('/', (req,res) =>{
     res.status(200).json({
@@ -27,6 +29,7 @@ app.get('/', (req,res) =>{
 
 //!using routes
 app.use('/api/auth',authRoutes)
+app.use('/api/category',categoryRoutes)
 
 
 //error handling middleware
