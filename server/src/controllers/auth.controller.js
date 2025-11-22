@@ -18,7 +18,7 @@ export const register = asyncHandler(async (req, res, next) => {
   if (!password) {
     /*
       const error = new Error("Password is required")
-      //status code + status + msg(pw is required) aafai lay pathako error aauda
+      status code + status + msg(pw is required) aafai lay pathako error aauda
       error.statusCode = 400
       error.status = 'fail'
       throw error
@@ -101,13 +101,14 @@ export const login = asyncHandler(async (req, res, next) => {
   });
 
   //!login success
-  res.cookie('assess_token', access_token, {  // Set the access token in a cookie
+  res.cookie('access_token', access_token, {  // Set the access token in a cookie
     httpOnly: true,
     sameSite: 'none',
     secure: process.env.NODE_ENV === 'development' ? false :true,
      // Set cookie expiry (defaults to 7 days)
-    maxAge: parseInt(process.env.COOKIE_EXPIRY || '7') *24 *60 *60 *1000 //(converting 7 days into millisec)
-  }).status(201).json({
+   maxAge: parseInt(process.env.COOKIE_EXPIRY || '7') * 24 * 60 * 60 * 1000 
+// Convert COOKIE_EXPIRY (in days) to milliseconds → days * 24h * 60m * 60s * 1000ms
+}).status(201).json({
     message: "login success",
     data: user,
     access_token

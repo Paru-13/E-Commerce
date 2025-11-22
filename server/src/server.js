@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import express from 'express'
 import { connectDB } from './config/db.config.js'
+import cookieParser from 'cookie-parser'
 
 //importing routes
 import authRoutes from './routes/auth.routes.js'
@@ -19,7 +20,8 @@ const app = express()
 connectDB()
 
 //using middlewares
-app.use(express.json({limit:'10mb'}))
+app.use(cookieParser())
+app.use(express.json({limit:'10mb'}))   //req.body 
 app.use('/api/uploads',express.static('uploads'))
 
 app.get('/', (req,res) =>{
@@ -30,7 +32,7 @@ app.get('/', (req,res) =>{
 
 //!using routes
 app.use('/api/auth',authRoutes)
-app.use('/api/category',categoryRoutes)
+app.use('/api/categories',categoryRoutes)
 app.use('/api/brands',brandRoutes)
 
 

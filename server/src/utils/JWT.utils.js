@@ -4,15 +4,16 @@ import { JWT_config } from "../config/config.js";
 
 export const generateJWTToken = (payload) => {
   return jwt.sign(payload, JWT_config.secret, {
-    expiresIN: JWT_config.expires_in,
+    expiresIn: JWT_config.expires_in,
   });
 };
 
-// ? verify jwt token
-export const verifyToken = (token) => {
+// verify jwt token
+export const verifyToken = (token)=>{
   try {
-    return jwt.verify(token, jwt_config.secret);
+    return jwt.verify(token, JWT_config.secret)  //verify garera token decode garera payload +data dinxa
+    
   } catch (error) {
-    throw new CustomError("jwt error", 500);
+    throw new CustomError('JWT error', 500)
   }
-};
+}
