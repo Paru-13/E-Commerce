@@ -101,7 +101,13 @@ export const login = asyncHandler(async (req, res, next) => {
   });
 
   //!login success
-  res.status(201).json({
+  res.cookie('assess_token', access_token, {  // Set the access token in a cookie
+    httpOnly: true,
+    sameSite: 'none',
+    secure: process.env.NODE_ENV === 'development' ? false :true,
+     // Set cookie expiry (defaults to 7 days)
+    maxAge: parseInt(process.env.COOKIE_EXPIRY || '7') *24 *60 *60 *1000 //(converting 7 days into millisec)
+  }).status(201).json({
     message: "login success",
     data: user,
     access_token
