@@ -1,5 +1,5 @@
 import express from 'express'
-import { login, register } from '../controllers/auth.controller.js'
+import { login, logout, register } from '../controllers/auth.controller.js'
 import { upoladFile } from '../middlewares/multer.middleware.js'
 
 
@@ -12,6 +12,7 @@ router.post('/register',uploader.single('profile_image'),register)  //fieldname-
 //login
 router.post('/login',login)
 
-//login
+//logout
+router.post('/logout', logout)
 
 export default router
