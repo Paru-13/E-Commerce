@@ -1,12 +1,12 @@
 import express from 'express'
-import { upoladFile } from '../middlewares/multer.middleware.js'
+import { uploadFile } from '../middlewares/multer.middleware.js'
 import { create, getAll, getByID, remove, update } from '../controllers/brand.controller.js'
 import { authenticate } from '../middlewares/authenticate.middleware.js'
 import { USER_ROLE } from '../constants/enums.constant.js'
 
 const router = express.Router()
 
-const upload = upoladFile()
+const upload = uploadFile()
 
 //create
 router.post('/',authenticate([USER_ROLE.ADMIN]),upload.single('image'),create)

@@ -1,11 +1,11 @@
 import express from 'express'
 import { login, logout, register } from '../controllers/auth.controller.js'
-import { upoladFile } from '../middlewares/multer.middleware.js'
+import { uploadFile } from '../middlewares/multer.middleware.js'
 
 
 const router = express.Router()
 
-const uploader = upoladFile('/profiles')
+const uploader = uploadFile('/profiles')
 //register
 router.post('/register',uploader.single('profile_image'),register)  //fieldname-pp, server ma file upload garxa, upload folder ma store garxa
 

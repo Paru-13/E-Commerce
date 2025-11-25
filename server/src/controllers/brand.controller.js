@@ -95,7 +95,7 @@ export const remove = asyncHandler(async (req, res) => {
   const brand = await Brand.findOne({ _id: id });
 
   if (!brand) {
-    throw new CustomError("Brand not dfound", 400);
+    throw new CustomError("Brand not found", 400);
   }
 
   if (brand.image) {

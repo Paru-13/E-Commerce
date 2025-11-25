@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.routes.js'
 import categoryRoutes from './routes/category.routes.js'
 import brandRoutes from './routes/brand.routes.js'
 import productRoutes from './routes/product.route.js'
+import wishlistRoutes from './routes/wishlist.route.js'
 
 //importing error handler
 import { errorHandler } from './middlewares/errorHandler.middleware.js'
@@ -36,6 +37,7 @@ app.use('/api/auth',authRoutes)
 app.use('/api/categories',categoryRoutes)
 app.use('/api/brands',brandRoutes)
 app.use('/api/product',productRoutes)
+app.use('/api/wishlist',wishlistRoutes)
 
 
 //error handling middleware

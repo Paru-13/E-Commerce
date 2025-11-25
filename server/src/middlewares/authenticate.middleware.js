@@ -58,6 +58,9 @@ export const authenticate = (roles) => {
         throw new CustomError("Forbidden.Access denied", 403); //user login xa tara tyo user lai access xaina vaneko
       }
 
+      //attach user to request
+      req.user = user;
+
       next(); //try ko kam sakay c controller ma pass garxa
     } catch (error) {
       next(error);

@@ -6,7 +6,7 @@ import CustomError from "./errorHandler.middleware.js";
 /*-creating middleware so we can use same code for multiple router to upload images/files
 -upload logic to reuse multiple times
 */
-export const upoladFile = (dir = "/") => {
+export const uploadFile = (dir = "/") => {
   //path connect garera check garnay file exist garxa ki gardaina
   const upload_path = "./uploads" + dir; //uploads vitra kun folder rakhnay
 
