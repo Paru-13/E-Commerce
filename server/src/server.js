@@ -10,6 +10,7 @@ import brandRoutes from './routes/brand.routes.js'
 import productRoutes from './routes/product.route.js'
 import wishlistRoutes from './routes/wishlist.route.js'
 import cartRoutes from './routes/cart.route.js'
+import orderRoutes from './routes/order.routes.js'
 
 //importing error handler
 import { errorHandler } from './middlewares/errorHandler.middleware.js'
@@ -40,6 +41,7 @@ app.use('/api/brands',brandRoutes)
 app.use('/api/product',productRoutes)
 app.use('/api/wishlist',wishlistRoutes)
 app.use('/api/cart',cartRoutes)
+app.use('/api/order',orderRoutes)
 
 
 //error handling middleware
