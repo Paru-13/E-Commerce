@@ -6,6 +6,7 @@ import { asyncHandler } from "../utils/asyncHandler.utils.js";
 import { uploadToCloud } from "../utils/cloudinary.utils.js";
 import { generateJWTToken } from "../utils/JWT.utils.js";
 import { sendEmail } from "../utils/nodemailer.utils.js";
+import { registerSuccessEmail } from "../utils/email.utils.js";
 
 //register user
 export const register = asyncHandler(async (req, res, next) => {
@@ -53,6 +54,12 @@ export const register = asyncHandler(async (req, res, next) => {
     };
   }
 
+  //send email
+  await sendEmail({
+    to: user.email,
+    subject: 'Account created',
+    html: registerSuccessEmail()
+  })
   await user.save();
 
   res.status(201).json({
