@@ -5,6 +5,7 @@ import { comparePW, hashPassword } from "../utils/bcrypt.utils.js";
 import { asyncHandler } from "../utils/asyncHandler.utils.js";
 import { uploadToCloud } from "../utils/cloudinary.utils.js";
 import { generateJWTToken } from "../utils/JWT.utils.js";
+import { sendEmail } from "../utils/nodemailer.utils.js";
 
 //register user
 export const register = asyncHandler(async (req, res, next) => {
@@ -90,6 +91,14 @@ export const login = asyncHandler(async (req, res, next) => {
   if (!isMatch) {
     throw new CustomError("Credentials doesnot match", 400);
   }
+
+  //NODEMAILER
+  await sendEmail({
+    to: user?.email,
+    subject:'Login Successful',
+    html:'<h1>New Login</h1>'
+
+  })
 
   //!Token create(payload)
   const access_token = generateJWTToken({
