@@ -9,6 +9,7 @@ import categoryRoutes from './routes/category.routes.js'
 import brandRoutes from './routes/brand.routes.js'
 import productRoutes from './routes/product.route.js'
 import wishlistRoutes from './routes/wishlist.route.js'
+import wishlist1Routes from './routes/wishlist1.routes.js'
 import cartRoutes from './routes/cart.route.js'
 import orderRoutes from './routes/order.routes.js'
 
@@ -40,6 +41,7 @@ app.use('/api/categories',categoryRoutes)
 app.use('/api/brands',brandRoutes)
 app.use('/api/product',productRoutes)
 app.use('/api/wishlist',wishlistRoutes)
+app.use('/api/wishlist1',wishlist1Routes)
 app.use('/api/cart',cartRoutes)
 app.use('/api/order',orderRoutes)
 

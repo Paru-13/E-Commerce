@@ -34,7 +34,8 @@ export const getByID = asyncHandler(async (req, res) => {
     data: product,
   });
 });
-//create
+
+//*create
 export const create = asyncHandler(async (req, res) => {
   const {
     name,
@@ -113,15 +114,95 @@ export const create = asyncHandler(async (req, res) => {
   });
 });
 
-//update
+//*update
 export const update = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const file = req.files;
-  const { name, price, stock, description } = req.body;
+
+  const {
+    name,
+    price,
+    stock,
+    description,
+    is_featured,
+    new_arrival,
+    category,
+    brand,
+  } = req.body;
+
+  const { cover_image, images } = req.files;
+  const product = await Product.findById(id);
+  if (!product) {
+    throw new CustomError("Product not found", 404);
+  }
+
+  if (name) product.name = name;
+  if (price) product.price = price;
+  if (stock) product.stock = stock;
+  if (description) product.description = description;
+  if (is_featured) product.is_featured = is_featured;
+  if (new_arrival) product.new_arrival = new_arrival;
+
+  if (category) {
+    const new_category = await Category.findById(category);
+    if (!new_category) {
+      throw new CustomError("Category not found", 404);
+    }
+
+    product.category = new_category._id;
+  }
+
+  if (brand) {
+    const new_brand = await Brand.findById(brand);
+    if (!new_brand) {
+      throw new CustomError("Brand not found", 404);
+    }
+
+    product.brand = new_brand._id;
+  }
+
+  //cover_image
+  if (cover_image) {
+    if (product.cover_image) {
+      //if cover image already exist xa vani delete garnay
+      await deleteFile(product.cover_image.public_id);
+    }
+    const { path, public_id } = await uploadToCloud(cover_image[0].path, dir);
+
+    product.cover_image = {
+      path,
+      public_id,
+    };
+  }
+
+  //images
+  if (images && Array.isArray(images) && images.length > 0) {
+    if (product.images) {
+      const promises = product.images.map(
+        async (image) => await deleteFile(image.public_id)
+      );
+      await Promise.all(promises);
+
+      // await Promise.all(images.map(async (image) => await deleteFile(image.public_id)))
+    }
+
+
+    //upload images
+    const new_images = await Promise.all(
+      images.map(async (img) => await uploadToCloud(img.path, dir))
+    );
+
+    product.images = new_images;
+  }
+    await product.save();
+    res.status(200).json({
+      message: "Product updated",
+      status: "success",
+      data: product,
+    });
+  
 });
 
 //delete
-
 export const remove = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -141,10 +222,58 @@ export const remove = asyncHandler(async (req, res) => {
   res.status(200).json({
     message: "product deleted",
     status: "Success",
-    data: product,
+    data: null,
   });
 });
+
 //getByCategory
+export const getBycategory = asyncHandler(async(req,res)=>{
+  const {category_id} = req.params
+  const product = await Product.find({category: category_id}).populate('category').populate('brand')
+
+  res.status(200).json({
+    message: 'Products fetched',
+    status: "success",
+    data: product
+
+  })
+})
+
 //getByBrand
+export const getBybrand = asyncHandler(async(req,res)=>{
+  const {brand_id} = req.params
+  const product = await Product.find({brand: brand_id}).populate('category').populate('brand')
+
+  res.status(200).json({
+    message: 'Products fetched',
+    status: "success",
+    data: product
+
+  })
+})
+
 //getAlllFeatured
+export const getAlllFeatured = asyncHandler(async(req,res)=>{
+   const product = await Product.find({is_featured:true}).populate('category').populate('brand')
+
+  res.status(200).json({
+    message: 'Products fetched',
+    status: "success",
+    data: product
+
+  })
+})
+
 //getAllNewArrivals
+export const getNewArrivals = asyncHandler(async(req,res)=>{
+   const product = await Product.find({new_arrival:true}).populate('category').populate('brand')
+
+  res.status(200).json({
+    message: 'Products fetched',
+    status: "success",
+    data: product
+
+  })
+})
+
+

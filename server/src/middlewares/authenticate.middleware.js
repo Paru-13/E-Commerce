@@ -59,7 +59,13 @@ export const authenticate = (roles) => {
       }
 
       //attach user to request
-      req.user = user;
+      req.user = {
+        _id: user._id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        role:user.role
+      }
 
       next(); //try ko kam sakay c controller ma pass garxa
     } catch (error) {

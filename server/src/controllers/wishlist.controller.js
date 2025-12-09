@@ -3,7 +3,7 @@ import Product from "../models/product.model.js";
 import Wishlist from "../models/wishlist.model.js";
 import { asyncHandler } from "../utils/asyncHandler.utils.js";
 
-// addToWishlist
+// addToWishlist-> create
 export const addWishlist = asyncHandler(async (req, res) => {
     // 1. get user and product
     const userID = req.user._id
@@ -14,14 +14,16 @@ export const addWishlist = asyncHandler(async (req, res) => {
     if(!product){
         throw new CustomError('Product not found', 404)
     }
+
     // 3. check duplicate
 
     const exists = await Wishlist.findOne({user:userID, product:productID})
     if(exists){
         throw new CustomError("Product already in wishlist", 409)
     }
-    // 4. save
+    // 4. create save
     const wishlistItem = new Wishlist({user:userID, product:productID})
+    
     await wishlistItem.save()
 
     res.status(201).json({
